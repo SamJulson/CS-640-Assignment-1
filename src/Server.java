@@ -33,7 +33,7 @@ public class Server implements Runnable {
 			in.close();
 			clientSocket.close();
 			serverSocket.close();
-			System.out.printf("sent=%d KB rate=%1.3d\n", kbytesRecieved, kbytesRecieved / (double) (endTime - startTime));
+			System.out.printf("sent=%d KB rate=%1.3f\n", kbytesRecieved, kbytesRecieved / (double) (endTime - startTime));
 		} catch (IOException e) {
 			throw new RuntimeException("Socket was unable to be created.");
 		}

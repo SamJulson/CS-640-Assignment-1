@@ -35,7 +35,7 @@ public class Client implements Runnable {
 			}
 			out.close();
 			clientSocket.close();
-			System.out.printf("sent=%d KB rate=%1.3d\n", kbytesSent, kbytesSent / (double) timeInSeconds);
+			System.out.printf("sent=%d KB rate=%1.3f\n", kbytesSent, kbytesSent / (double) timeInSeconds);
 		} catch (IOException e) {
 			throw new RuntimeException("Socket was unable to be created.");
 		}
