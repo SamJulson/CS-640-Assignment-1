@@ -1,6 +1,7 @@
-import java.io.*;
-import java.net.*;
-import java.security.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 
 public class Client implements Runnable {
@@ -23,12 +24,12 @@ public class Client implements Runnable {
 	public void run() {
 		try(
 			Socket clientSocket = new Socket(serverHostname, serverPort);
-			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+			OutputStream out = clientSocket.getOutputStream();
 		) {
 			long startTime = System.currentTimeMillis();
 			int kbytesSent = 0;
 			while (System.currentTimeMillis() - startTime < timeInSeconds * 1000) {
-				out.print(zeroes);
+				out.write(zeroes);
 				out.flush();
 				kbytesSent++;
 			}
