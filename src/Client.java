@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.security.*;
 import java.util.Arrays;
-
+//Joe was here
 public class Client implements Runnable {
 	private String serverHostname;
 	private int serverPort;
