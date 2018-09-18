@@ -1,0 +1,3 @@
+[submodule "lib/commons-cli"]
+	path = lib/commons-cli
+	url = https://github.com/apache/commons-cli
