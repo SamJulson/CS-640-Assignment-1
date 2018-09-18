@@ -3,7 +3,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
-//Joe was here
+
 public class Client implements Runnable {
 	private String serverHostname;
 	private int serverPort;
