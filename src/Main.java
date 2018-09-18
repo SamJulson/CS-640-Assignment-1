@@ -1,87 +1,77 @@
+import java.security.InvalidParameterException;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 public class Main {
 	
-	private static final String SERVER_FLAG = "-s";
-	private static final String CLIENT_FLAG = "-c";
-	private static final String HOST_PARAM = "-h";
-	private static final String PORT_PARAM = "-p";
-	private static final String TIME_PARAM = "-t";
+	private static final String CLIENT_OPTION = "c";
+	private static final String SERVER_OPTION = "s";
+	private static final String HOST_OPTION = "h";
+	private static final String PORT_OPTION = "p";
+	private static final String TIME_OPTION = "t";
 	
-	// TODO: Refactor the main function
 	public static void main(String[] args) {
-		boolean isClient = false;
-		int port = 0;
-		int timeInSeconds = 0;
-		String serverHostname = "";
+		Options options = new Options();
+		options.addOption(CLIENT_OPTION, false, "Starts the program in client mode");
+		options.addOption(SERVER_OPTION, false, "Starts the program in server mode");
+		options.addOption(HOST_OPTION, true, "Specifies the server host name. Client only.");
+		options.addOption(PORT_OPTION, true, "Specifies the port number. Must in between 1024 and 65535.");
+		options.addOption(TIME_OPTION, true, "Specifies the time in seconds to transmit. Client only.");
 		
-		// For every string in the argument list
-		for (int i = 0; i < args.length; i++) {
-			// If the string is a...
-			switch(args[i]) {
-				// server flag
-				case SERVER_FLAG:
-					// we are a server!
-					isClient = false;
-					break;
-				case CLIENT_FLAG:
-					// we are a client!
-					isClient = true;
-					break;
-				// host, port, time flags
-				case HOST_PARAM:
-				case PORT_PARAM:
-				case TIME_PARAM:
-					// If the option is available
-					if (i + 1 < args.length) {
-						// If the string is...
-						switch (args[i]) {
-							// a host flag
-							case HOST_PARAM:
-								serverHostname = args[i+1];
-							// a port flag
-							case PORT_PARAM:
-								int portArg = 0;
-								
-								// Try to parse the port, if we fail we shut down the user.
-								try {
-									portArg = Integer.parseInt(args[i+1]);
-								} catch (NumberFormatException e) {
-									Error.exitError(new IllegalArgumentException(Error.INVALID_OR_MISSING_ARGUMENTS));
-								}
-								
-								port = portArg;
-								break;
-							// a time flag
-							case TIME_PARAM:
-								
-								// try to parse the time, if we fail, we shut down the user
-								try {
-									timeInSeconds = Integer.parseInt(args[i+1]);
-								} catch (NumberFormatException e) {
-									Error.exitError(new IllegalArgumentException(Error.INVALID_OR_MISSING_ARGUMENTS));
-								}
-								break;
-							default:
-								break;
-						}
-					} else {
-						
-					}
-					break;
-				default:
-					break;
+		CommandLineParser parser = new DefaultParser();
+		CommandLine cmd = null;
+		
+		try {
+			cmd = parser.parse(options, args);
+		} catch (ParseException e) {
+			Error.exitError(Error.INVALID_OR_MISSING_ARGUMENTS);
+		}
+		
+		if (cmd.hasOption(CLIENT_OPTION) && cmd.hasOption(SERVER_OPTION)) {
+			Error.exitError(Error.INVALID_OR_MISSING_ARGUMENTS);
+		}
+		
+		if (!cmd.hasOption(PORT_OPTION)) {
+			Error.exitError(Error.INVALID_OR_MISSING_ARGUMENTS);
+		}
+		
+		if (!cmd.hasOption(SERVER_OPTION) && (!cmd.hasOption(TIME_OPTION) || !cmd.hasOption(HOST_OPTION))) {
+			Error.exitError(Error.INVALID_OR_MISSING_ARGUMENTS);
+		}
+		
+		boolean isServer = false;
+		int port = 0;
+		String hostname = null;
+		int timeInSeconds = 0;
+		
+		isServer = false || cmd.hasOption(SERVER_OPTION);
+		hostname = cmd.getOptionValue(HOST_OPTION);
+		
+		try {
+			port = Integer.parseInt(cmd.getOptionValue(PORT_OPTION));
+			if (cmd.hasOption(TIME_OPTION)) {
+				timeInSeconds = Integer.parseInt(cmd.getOptionValue(TIME_OPTION));
 			}
+		} catch (NumberFormatException e) {
+			Error.exitError(Error.INVALID_OR_MISSING_ARGUMENTS);
 		}
 		
 		Runnable program = null;
-		try {
-			if (isClient) {
-				program = new Client(serverHostname, port, timeInSeconds);
-			} else {
+		
+		try {		
+			if (isServer) {
 				program = new Server(port);
+			} else {
+				program = new Client(hostname, port, timeInSeconds);
 			}
-		} catch (Exception e) {
-			Error.exitError(new IllegalArgumentException(Error.INVALID_OR_MISSING_ARGUMENTS));
+		} catch (InvalidParameterException e) {
+			Error.exitError(Error.INVALID_PORT_NUMBER);
 		}
+		
 		program.run();
 		System.exit(0);
 	}

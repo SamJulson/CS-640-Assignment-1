@@ -10,6 +10,10 @@ public class Client implements Runnable {
 	private int timeInSeconds;
 	private byte[] zeroes;
 	
+	private static final int KILOB_PER_MEGAB = 1000;
+	private static final int BITS_PER_BYTE = 8;
+	private static final int MILLIS_PER_SEC = 1000;
+	
 	public Client(String serverHostname, int serverPort,  int timeInSeconds) {
 		if (serverPort < 1024 || serverPort > 65535) {
 			throw new InvalidParameterException(Error.INVALID_PORT_NUMBER);
@@ -33,9 +37,14 @@ public class Client implements Runnable {
 				out.flush();
 				kbytesSent++;
 			}
+			long endTime = System.currentTimeMillis();
 			out.close();
 			clientSocket.close();
-			System.out.printf("sent=%d KB rate=%1.3f\n", kbytesSent, kbytesSent / (double) timeInSeconds);
+			System.out.printf(
+				"sent=%d KB rate=%1.3f Mbps\n", 
+				kbytesSent, 
+				(kbytesSent / KILOB_PER_MEGAB * BITS_PER_BYTE) / (((double) endTime - startTime ) / MILLIS_PER_SEC)
+			);
 		} catch (IOException e) {
 			throw new RuntimeException("Socket was unable to be created.");
 		}
