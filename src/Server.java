@@ -30,8 +30,8 @@ public class Server implements Runnable {
 			while (!clientSocket.isConnected()) {
 				;
 			}
-			long startTime = System.currentTimeMillis();
 			int kbytesRecieved = 0;
+			long startTime = System.currentTimeMillis();
 			while (in.read(zeroes) != -1) {
 				kbytesRecieved++;
 			}

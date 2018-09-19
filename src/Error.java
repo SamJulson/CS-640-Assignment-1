@@ -6,5 +6,4 @@ public class Error {
 		System.out.println(s);
 		System.exit(1);
 	}
-	
 }
