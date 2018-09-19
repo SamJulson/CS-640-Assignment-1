@@ -19,7 +19,7 @@ public class Main {
 		options.addOption(CLIENT_OPTION, false, "Starts the program in client mode");
 		options.addOption(SERVER_OPTION, false, "Starts the program in server mode");
 		options.addOption(HOST_OPTION, true, "Specifies the server host name. Client only.");
-		options.addOption(PORT_OPTION, true, "Specifies the port number. Must in between 1024 and 65535.");
+		options.addOption(PORT_OPTION, true, "Specifies the port number. Must be in between 1024 and 65535.");
 		options.addOption(TIME_OPTION, true, "Specifies the time in seconds to transmit. Client only.");
 		
 		CommandLineParser parser = new DefaultParser();

@@ -9,16 +9,12 @@ public class Server implements Runnable {
 	private int listenPort;
 	private byte[] zeroes;
 	
-	private static final int KILOB_PER_MEGAB = 1000;
-	private static final int BITS_PER_BYTE = 8;
-	private static final int MILLIS_PER_SEC = 1000;
-	
 	public Server(int listenPort) {
-		if (listenPort < 1024 || listenPort > 65535) {
+		if (listenPort < Constants.MIN_PORT || listenPort > Constants.MAX_PORT) {
 			throw new InvalidParameterException(Error.INVALID_PORT_NUMBER);
 		}
 		this.listenPort = listenPort;
-		zeroes = new byte[1000];
+		zeroes = new byte[Constants.BYTES_PER_KILOBYTE];
 	}
 
 	public void run() {
@@ -41,7 +37,8 @@ public class Server implements Runnable {
 			System.out.printf(
 				"recieved=%d KB rate=%1.3f Mbps\n", 
 				kbytesRecieved, 
-				(kbytesRecieved / KILOB_PER_MEGAB * BITS_PER_BYTE) / (((double) endTime - startTime ) / MILLIS_PER_SEC)
+				(kbytesRecieved / Constants.KILOBYTES_PER_MEGABYTE * Constants.BITS_PER_BYTE) /
+				(((double) endTime - startTime ) / Constants.MILLISECONDS_PER_SECOND)
 			);
 		} catch (IOException e) {
 			throw new RuntimeException("Socket was unable to be created.");
