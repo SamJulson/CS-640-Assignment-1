@@ -39,7 +39,7 @@ public class Server implements Runnable {
 			in.close();
 			serverSocket.close();
 			System.out.printf(
-				"sent=%d KB rate=%1.3f Mbps\n", 
+				"recieved=%d KB rate=%1.3f Mbps\n", 
 				kbytesRecieved, 
 				(kbytesRecieved / KILOB_PER_MEGAB * BITS_PER_BYTE) / (((double) endTime - startTime ) / MILLIS_PER_SEC)
 			);
