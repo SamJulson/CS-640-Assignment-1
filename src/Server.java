@@ -23,21 +23,25 @@ public class Server implements Runnable {
 			Socket clientSocket = serverSocket.accept();
 			InputStream in = clientSocket.getInputStream();
 		) {
+			int kbytesRead;
 			while (!clientSocket.isConnected()) {
 				;
 			}
 			int kbytesRecieved = 0;
 			long startTime = System.currentTimeMillis();
-			while (in.read(zeroes) != -1) {
-				kbytesRecieved++;
+			
+			kbytesRead = in.read(zeroes);
+			while (kbytesRead != -1) {
+				kbytesRecieved += kbytesRead;
+				kbytesRead = in.read(zeroes);
 			}
 			long endTime = System.currentTimeMillis();
 			in.close();
 			serverSocket.close();
 			System.out.printf(
 				"recieved=%d KB rate=%1.3f Mbps\n", 
-				kbytesRecieved, 
-				(kbytesRecieved / Constants.KILOBYTES_PER_MEGABYTE * Constants.BITS_PER_BYTE) /
+				kbytesRecieved / Constants.BYTES_PER_KILOBYTE, 
+				(kbytesRecieved / (Constants.KILOBYTES_PER_MEGABYTE * Constants.BYTES_PER_KILOBYTE) * Constants.BITS_PER_BYTE) /
 				(((double) endTime - startTime ) / Constants.MILLISECONDS_PER_SECOND)
 			);
 		} catch (IOException e) {
