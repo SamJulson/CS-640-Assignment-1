@@ -1,0 +1,10 @@
+Partner 1: Samuel Julson
+Partner 2: Joe Schwartz
+CS Login 1: julson
+CS Login 2: jschwartz
+
+Sam:
+This project was pretty fun, I liked it a lot. I really liked how we were able
+to use a library to parse the command line arguments, as I get really finicky
+about parsing. I guess, if I were to do this assignment again, I would try and
+refactor the Client and Server classes into a generic class somehow.
