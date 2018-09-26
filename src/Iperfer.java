@@ -6,7 +6,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-public class Main {
+public class Iperfer {
 	
 	private static final String CLIENT_OPTION = "c";
 	private static final String SERVER_OPTION = "s";
